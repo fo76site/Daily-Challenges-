@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fallout 76 Daily Challenges</title>
+  <style>
+    * { font-family: sans-serif; font-size: 18px; }
+    body { text-align: center; margin: 2em; }
+    table { margin: auto; border-collapse: collapse; }
+    table, th, td { border: 1px solid black; padding: 5px; }
+    .nav { margin: 1em; }
+  </style>
+</head>
+<body>
+  <h1>Fallout 76 Daily Challenges</h1>
+  <div class="nav">
+    <button onclick="changeDay(-1)">Previous</button>
+    <span id="dateLabel"></span>
+    <button onclick="changeDay(1)">Next</button>
+  </div>
+  <table id="challengeTable">
+    <thead>
+      <tr><th>Challenge</th><th>Description</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script>
+    const challenges = {
+      "2025-06-23": [
+        ["Kill 10 Super Mutants", "Eliminate super mutants in any region"],
+        ["Complete an Event", "Finish any public event"]
+      ],
+      "2025-06-24": [
+        ["Hack a Terminal", "Hack a level 1+ terminal"],
+        ["Craft 5 Items", "Use any workbench to craft items"]
+      ],
+      "2025-06-25": [
+        ["Kill 3 Scorchbeasts", "Defeat Scorchbeasts anywhere"],
+        ["Complete a Daily Op", "Finish a daily op mission"]
+      ]
+    };let currentDate = new Date();
+
+function formatDate(date) {
+  return date.toISOString().split('T')[0];
+}
+
+function renderChallenges(date) {
+  const dateStr = formatDate(date);
+  document.getElementById("dateLabel").innerText = dateStr;
+  const tableBody = document.querySelector("#challengeTable tbody");
+  tableBody.innerHTML = "";
+
+  const daily = challenges[dateStr] || [["No Data", "No challenges available"]];
+  daily.forEach(([title, desc]) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td>${title}</td><td>${desc}</td>`;
+    tableBody.appendChild(row);
+  });
+}
+
+function changeDay(offset) {
+  currentDate.setDate(currentDate.getDate() + offset);
+  renderChallenges(currentDate);
+}
+
+renderChallenges(currentDate);
+
+  </script>
+</body>
+</html>
