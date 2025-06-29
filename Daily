@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #fff; /* white background */
+      color: #000;      /* black text */
+      text-align: center;
+      margin-top: 100px;
+    }
+    #countdown {
+      font-size: 64px;
+      font-weight: bold;
+      margin-bottom: 40px;
+    }
+    #progress-container {
+      width: 80%;
+      height: 20px;
+      background: #ccc;
+      margin: 0 auto;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #4caf50;
+      transition: width 1s linear;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Daily</h1>
+  <div id="countdown">00:00:00</div>
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+
+  <script>
+    const countdownElement = document.getElementById("countdown");
+    const progressBar = document.getElementById("progress-bar");
+
+    function updateCountdown() {
+      const now = new Date();
+      const target = new Date();
+      target.setHours(11, 0, 0, 0); // Today at 11:00 AM
+
+      const totalSecondsInDay = 24 * 60 * 60;
+      const secondsSinceMidnight = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+
+      // If it's past 11 AM, target is tomorrow
+      if (now >= target) {
+        target.setDate(target.getDate() + 1);
+      }
+
+      const secondsUntilTarget = Math.floor((target - now) / 1000);
+
+      const hrs = Math.floor(secondsUntilTarget / 3600).toString().padStart(2, '0');
+      const mins = Math.floor((secondsUntilTarget % 3600) / 60).toString().padStart(2, '0');
+      const secs = (secondsUntilTarget % 60).toString().padStart(2, '0');
+      countdownElement.textContent = `${hrs}:${mins}:${secs}`;
+
+      // Progress bar (midnight to 11:00 AM = 11 * 3600 seconds)
+      const progressMax = 11 * 3600;
+      let elapsedToTarget = (11 * 3600) - secondsUntilTarget;
+
+      // If after 11 AM, set elapsed to 0 so bar resets
+      if (elapsedToTarget < 0) elapsedToTarget = 0;
+
+      const progressPercent = (elapsedToTarget / progressMax) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+
+</body>
+</html>
